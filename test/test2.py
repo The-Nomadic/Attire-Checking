@@ -1,8 +1,8 @@
 import requests
 
 # Send the request
-with open('eight.png', 'rb') as f:
-    resp = requests.post("https://get-prediction-ixifovjelq-an.a.run.app", files={'file': f})
+with open('/pics/test4.webp', 'rb') as f:
+    resp = requests.post("https://attire-app-ixifovjelq-wl.a.run.app", files={'file': f})
 
 # Print response status code
 print("Status Code:", resp.status_code)
