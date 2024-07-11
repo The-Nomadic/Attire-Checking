@@ -10,13 +10,14 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 model = keras.models.load_model("Attire_model1 1.h5")
 
+
 def transform_image(pillow_image):
     data = np.asarray(pillow_image)
     data = data / 255.0
-    data = tf.image.resize(data, [128, 128])  # Changed to match original target size
-    data = np.repeat(data[..., np.newaxis], 3, axis=-1)  # Duplicate the channel to match RGB format
-    data = np.expand_dims(data, axis=0)
+    data = tf.image.resize(data, [128, 128])  # Ensure correct size
+    data = np.expand_dims(data, axis=0)  # Add batch dimension
     return data
+
 
 def predict(x):
     predictions = model(x)
@@ -25,7 +26,9 @@ def predict(x):
     label0 = np.argmax(pred0)
     return label0
 
+
 app = Flask(__name__)
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -45,6 +48,7 @@ def index():
             return jsonify({"error": str(e)})
 
     return "OK"
+
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 8080))
