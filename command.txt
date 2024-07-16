@@ -20,3 +20,5 @@ gcloud compute disks create --size=5GB --zone=us-central1-a your-disk-name
 
 # Submit cloud build
 gcloud builds submit --config cloudbuild.yaml .
+
+gcloud compute disks create --size=5GB --zone=us-central1-a attire-disk --type=pd-standard

@@ -9,5 +9,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   gcePersistentDisk:
-    pdName: your-disk-name
+    pdName: attire-disk
     fsType: ext4
+
+
