@@ -19,7 +19,14 @@ steps:
       - 'CLOUDSDK_CONTAINER_CLUSTER=attire-cluster'
 
   - name: 'gcr.io/cloud-builders/kubectl'
-    id: 'Apply Deployment'
+    id: 'Create Deployment'
+    args: ['apply', '-f', 'deployment.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=attire-cluster'
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    id: 'Update Deployment Image'
     args: ['set', 'image', 'deployment/attire-app-deployment', 'attire-app=gcr.io/$PROJECT_ID/attire-app:$BUILD_ID']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
