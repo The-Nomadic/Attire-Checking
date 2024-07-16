@@ -1,0 +1,22 @@
+
+#if the model is in the volume then use the below code in main.py
+model = keras.models.load_model("/app/data/Attire_model1 1.h5")
+
+#IAM Permission
+PROJECT_ID=$(gcloud config get-value project)
+SA_EMAIL=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member=serviceAccount:$SA_EMAIL \
+  --role=roles/container.developer
+
+# Create GKE cluster
+gcloud container clusters create attire-cluster --zone us-central1-a
+
+# Get auth cred for the cluster
+gcloud container clusters get-credentials attire-cluster --zone us-central1-a
+
+# Create a pv disk
+gcloud compute disks create --size=5GB --zone=us-central1-a your-disk-name
+
+# Submit cloud build
+gcloud builds submit --config cloudbuild.yaml .

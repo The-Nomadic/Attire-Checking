@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attire-app-deployment
+  labels:
+    app: attire-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: attire-app
+  template:
+    metadata:
+      labels:
+        app: attire-app
+    spec:
+      containers:
+      - name: attire-app
+        image: gcr.io/$PROJECT_ID/attire-app:$BUILD_ID
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        volumeMounts:
+        - name: attire-storage
+          mountPath: /app/data
+      volumes:
+      - name: attire-storage
+        persistentVolumeClaim:
+          claimName: attire-pvc
+
+
+

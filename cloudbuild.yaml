@@ -3,8 +3,34 @@ steps:
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/attire-app:$BUILD_ID', '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/attire-app:$BUILD_ID']
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'attire-app', '--image', 'gcr.io/$PROJECT_ID/attire-app:$BUILD_ID', '--platform', 'managed', '--region', 'us-west2', '--allow-unauthenticated']
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    id: 'Apply Persistent Volume'
+    args: ['apply', '-f', 'persistent-volume.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=attire-cluster'
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    id: 'Apply Persistent Volume Claim'
+    args: ['apply', '-f', 'persistent-volume-claim.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=attire-cluster'
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    id: 'Apply Deployment'
+    args: ['set', 'image', 'deployment/attire-app-deployment', 'attire-app=gcr.io/$PROJECT_ID/attire-app:$BUILD_ID']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=attire-cluster'
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    id: 'Apply Service'
+    args: ['apply', '-f', 'service.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=attire-cluster'
 
 images:
   - 'gcr.io/$PROJECT_ID/attire-app:$BUILD_ID'
