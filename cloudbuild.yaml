@@ -5,7 +5,7 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/attire-app:$BUILD_ID']
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['run', 'deploy', 'attire-app', '--image', 'gcr.io/$PROJECT_ID/attire-app:$BUILD_ID', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated',
-            '--add-volume', 'name=attire-volume,type=cloud-storage,bucket=my-bucket',
+            '--add-volume', 'name=attire-volume,type=cloud-storage,bucket=attire-bucket',
             '--add-volume-mount', 'volume=attire-volume,mount-path=/home/rarij/attire-volume']
 
 images:
