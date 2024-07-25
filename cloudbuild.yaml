@@ -4,8 +4,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/attire-app:$BUILD_ID']
   - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args: ['-c', 'gcloud run deploy attire-app --image gcr.io/$PROJECT_ID/attire-app:$BUILD_ID --platform managed --region us-central1 --allow-unauthenticated --add-volume name=attire-volume,type=cloud-storage,bucket=attire-bucket --add-volume-mount volume=attire-volume,mount-path=/home/rarij/attire-volume']
+    args: ['run', 'deploy', 'attire-app', '--image', 'gcr.io/$PROJECT_ID/attire-app:$BUILD_ID', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
 
 images:
   - 'gcr.io/$PROJECT_ID/attire-app:$BUILD_ID'
